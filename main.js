@@ -137,7 +137,7 @@ function generateNaiveBayesForm(headers) {
 
 function processKMeans(configCsv, dataCsv) {
     if (myChart) {
-        myChart.destroy();
+        clearCanvas()
     }
     const [k, iterations] = configCsv[0].map(Number);
     const data = dataCsv.map(line => parseInt(line[0])).filter(num => !isNaN(num));
@@ -189,7 +189,7 @@ function processKMeans(configCsv, dataCsv) {
 
 function processKMeans2(configCsv, dataCsv) {
     if (myChart) {
-        myChart.destroy();
+        clearCanvas()
     }
     const [k, iterations] = configCsv[0].map(Number);
     const data = dataCsv.map(pair => [parseInt(pair[0]), parseInt(pair[1])]);
@@ -291,13 +291,19 @@ function calculateR2(predictions, actual) {
 
     return 1 - (ssRes / ssTotal);
 }
+function clearCanvas() {
+    const canvas = document.getElementById("myChart");
+    const ctx = canvas.getContext("2d");
 
+    // Limpiar el canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 // Mostrar gráfica para regresión lineal
 function showLinearGraph(xValues, yValues) {
     const ctx = document.getElementById("myChart").getContext("2d");
 
     if (myChart) {
-        myChart.destroy();
+        clearCanvas()
     }
 
     const r2Value = calculateR2(predictions, yValues);
@@ -358,7 +364,7 @@ function showPolynomialGraph(xValues, yValues) {
     const ctx = document.getElementById("myChart").getContext("2d");
 
     if (myChart) {
-        myChart.destroy();
+        clearCanvas()
     }
 
     const r2Value = calculateR2(predictions, yValues);
@@ -463,7 +469,7 @@ function showNeuralNetworkBiases(biases) {
 
 function drawWeightsBiasesChart(weights, biases) {
     if (myChart) {
-        myChart.destroy();
+        clearCanvas()
     }
     const weightLabels = weights.map((_, index) => `Capa ${index + 1}`);
     const weightData = {
@@ -518,7 +524,7 @@ function handleTrain() {
             linearModel.fit(xValues, yValues);
             predictions = linearModel.predict(xValues); // Realizar predicciones
             console.log("Predicciones Lineales:", predictions); // Verifica las predicciones
-            alert("Modelo de regresión lineal entrenado y predicciones realizadas.");
+            alert("Modelo de regresión lineal entrenado, predicciones y gráficas realizadas.");
             showLinearGraph(xValues, yValues); // Mostrar gráfica de regresión lineal
         } else if (selectedAlgorithm === "polynomial_regression") {
             // Regresión Polinómica
@@ -527,7 +533,7 @@ function handleTrain() {
             polynomialModel.fit(xValues, yValues, degree);
             predictions = polynomialModel.predict(xValues); // Realizar predicciones
             console.log("Predicciones Polinómicas:", predictions); // Verifica las predicciones
-            alert(`Modelo de regresión polinómica de grado ${degree} entrenado y predicciones realizadas.`);
+            alert(`Modelo de regresión polinómica de grado ${degree} entrenado, predicciones y gráficas realizadas.`);
             showPolynomialGraph(xValues, yValues); // Mostrar gráfica de regresión polinómica
         } else if (selectedAlgorithm === "decision_tree") {
             // Árbol de Decisión
@@ -538,6 +544,7 @@ function handleTrain() {
             console.log("Predicción:", predictNode);
             // Generar y visualizar el árbol
             const dotStr = decisionTreeModel.generateDotString(root);
+            alert("Modelo de arbol de desición entrenado, predicciones y gráficas realizadas.");
             showDecisionTreeGraph(dotStr);
         } else if (selectedAlgorithm === "naive_bayes") {
             let model = new BayesMethod();
@@ -566,6 +573,7 @@ function handleTrain() {
             const prediction = model.predict(inputValues);  // Usar los valores dinámicos en lugar de una matriz estática
             console.log(`La predicción es: ${prediction[0]} con una probabilidad de ${prediction[1]}`);
             showNaiveBayesPrediction(prediction);
+            alert("Modelo de Naive Bayes entrenado, predicciones y gráficas realizadas.");
         } else if (selectedAlgorithm === "neuronal_network") {
             const layers = csvData3[0].map(Number);
 
@@ -605,6 +613,7 @@ function handleTrain() {
             showNeuralNetworkBiases(nn.layerLink[0].obtener_Bias().data);
             // Llama a la función para dibujar la gráfica
             drawWeightsBiasesChart(nn.layerLink[0].obtener_Weights().data, nn.layerLink[0].obtener_Bias().data);
+            alert("Modelo de Red Neuronal entrenado, predicciones y gráficas realizadas.");
         } else if (selectedAlgorithm === "kmeans") {
             const isTwoDimensional = csvData2.every(row => Array.isArray(row) && row.length === 2);
             // Verificar si csvData3 es un arreglo de dos dimensiones
@@ -615,7 +624,9 @@ function handleTrain() {
                 // csvData3 es un arreglo de una dimensión
                 processKMeans(csvData3, csvData2);
             }
+            alert("Modelo de KMeans entrenado, predicciones y gráficas realizadas.");
         } else if (selectedAlgorithm === "knn") {
+            alert("Modelo de K-Vecinos Más Cercanos entrenado, predicciones y gráficas realizadas.");
             calculateDistances(csvData3, csvData2)
         }
     } else {

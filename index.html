@@ -156,13 +156,6 @@
     <script src="main.js"></script>
 
     <script>
-      function clearCanvas() {
-        const canvas = document.getElementById("myChart");
-        const ctx = canvas.getContext("2d");
-
-        // Limpiar el canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
       function resetFields() {
         // Reinicia los elementos de los formularios a su estado original
         document.getElementById("datasetInput").value = "";
@@ -185,7 +178,6 @@
           "neuralNetworkBiasesContainer",
           "tree",
           "chartkmean",
-          "myChart",
         ];
 
         containers.forEach((container) => {
@@ -194,7 +186,7 @@
       }
       function updateVisibility() {
         resetFields();
-        clearCanvas();
+        // clearCanvas();
         const selectedModel = document.getElementById("algorithmSelect").value;
         const columnSelection = document.getElementById("columnSelection");
         const secondFileUpload = document.getElementById("secondFileUpload");
